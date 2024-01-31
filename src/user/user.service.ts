@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './user.dto';
 import { hash } from 'bcrypt';
-import { Errors } from 'src/constants/error.constants';
+import { Errors } from 'src/constants/errors.constants';
 
 @Injectable()
 export class UserService {
@@ -13,28 +13,31 @@ export class UserService {
             where: {
                 email: dto.email
             }
-        })
+        });
 
         if (user) {
-            throw new ConflictException(Errors.UsedEmail)
+            throw new ConflictException(Errors.UsedEmail);
         } else {
+            const hashedPassword = await hash(dto.password, 10);
+
             const newUser = await this.prisma.user.create({
                 data: {
                     ...dto,
-                    password: await hash(dto.password, 10)
+                    password: hashedPassword,
+                    confirmpassword: hashedPassword,
                 }
-            })
+            });
 
-            const { password, ...result } = newUser;
+            const { password, confirmpassword, ...result } = newUser;
             return result;
         }
     }
 
     public async findByEmail(email: string) {
-        return await this.prisma.user.findUnique({ where: { email: email } })
+        return await this.prisma.user.findUnique({ where: { email: email } });
     }
 
     public async findById(id: number) {
-        return await this.prisma.user.findUnique({ where: { id: id } })
+        return await this.prisma.user.findUnique({ where: { id: id } });
     }
 }

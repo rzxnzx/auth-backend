@@ -3,7 +3,6 @@
 /node_modules
 
 # Logs
-.env
 logs
 *.log
 npm-debug.log*
@@ -27,6 +26,8 @@ lerna-debug.log*
 *.launch
 .settings/
 *.sublime-workspace
+package-lock.json
+.env
 
 # IDE - VSCode
 .vscode/*

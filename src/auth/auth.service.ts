@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserLogin } from './auth.dto';
 import { UserService } from 'src/user/user.service';
-import { AuthDTO } from './auth.dto';
 import { compare } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { TokenConfig } from 'src/constants/token.constant';
+import { Success } from 'src/constants/success.constants';
 
 @Injectable()
 export class AuthService {
     constructor(private userService: UserService, private jwtService: JwtService) { }
 
-    public async login(dto: AuthDTO) {
+    public async login(dto: UserLogin) {
         const user = await this.validateUser(dto);
         const payload = {
             username: user.email,
@@ -18,20 +20,22 @@ export class AuthService {
         }
 
         return {
-            user, token: {
-                accessToken: await this.jwtService.signAsync(payload, {
-                    expiresIn: '1h',
+            user, Tokens: {
+                Access: await this.jwtService.signAsync(payload, {
+                    expiresIn: TokenConfig.TokenExpire,
                     secret: process.env.JwtSecretKey,
                 }),
-            }
+            },
+            status: Success.OK
         }
     }
 
-    private async validateUser(dto: AuthDTO) {
+
+    private async validateUser(dto: UserLogin) {
         const user = await this.userService.findByEmail(dto.email);
 
         if (user && (await compare(dto.password, user.password))) {
-            const { password, ...result } = user;
+            const { password, confirmpassword,  ...result } = user;
             return result;
         }
         throw new UnauthorizedException();
