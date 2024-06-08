@@ -13,7 +13,7 @@ export class CreateUserDto {
     password: string;
 
     @IsString()
-    confirmpassword: string
+    confirmPassword: string
     
     @IsBoolean()
     acceptTerms: boolean

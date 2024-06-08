@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/services/prisma.service';
 import { CreateUserDto } from './user.dto';
 import { hash } from 'bcrypt';
 import { Errors } from 'src/constants/errors.constants';
@@ -24,11 +24,11 @@ export class UserService {
                 data: {
                     ...dto,
                     password: hashedPassword,
-                    confirmpassword: hashedPassword,
+                    confirmPassword: hashedPassword,
                 }
             });
 
-            const { password, confirmpassword, ...result } = newUser;
+            const { password, confirmPassword, ...result } = newUser;
             return result;
         }
     }

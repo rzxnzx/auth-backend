@@ -8,10 +8,71 @@ datasource db {
 }
 
 model User {
-  id              Int     @id @default(autoincrement())
-  email           String  @unique
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
   name            String
   password        String
-  confirmpassword String
-  acceptTerms   Boolean? @default(true)
+  confirmPassword String
+  acceptTerms     Boolean?  @default(true)
+  bookings        Booking[]
+}
+
+model Room {
+  id          Int       @id @default(autoincrement())
+  roomNumber  String    @unique
+  type        String
+  description String?
+  price       Float
+  isAvailable Boolean   @default(true)
+  bookings    Booking[]
+}
+
+model Booking {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  roomId       Int
+  checkInDate  DateTime
+  checkOutDate DateTime
+  status       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user           User             @relation(fields: [userId], references: [id])
+  room           Room             @relation(fields: [roomId], references: [id])
+  Payment        Payment[]
+  Service        Service?         @relation(fields: [serviceId], references: [id])
+  serviceId      Int?
+  BookingService BookingService[]
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  bookingId   Int
+  amount      Float
+  paymentDate DateTime @default(now())
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Service {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String?
+  price          Float
+  bookings       Booking[]
+  BookingService BookingService[]
+}
+
+model BookingService {
+  id        Int   @id @default(autoincrement())
+  bookingId Int
+  serviceId Int
+  quantity  Int   @default(1)
+  total     Float
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
 }
