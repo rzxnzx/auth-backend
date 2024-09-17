@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenConfig } from 'src/constants/token.constant';
 import { Success } from 'src/constants/success.constants';
 import { randomInt } from 'crypto';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { SmtpService } from 'src/services/smtp.service';
 
 @Injectable()
