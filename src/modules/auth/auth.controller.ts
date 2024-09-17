@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CreateUserDto } from 'src/modules/user/user.dto';
 import { UserService } from 'src/modules/user/user.service';
-import { UserLogin } from './auth.dto';
+import { TwoFactorAuthDto, UserLogin } from './auth.dto';
 import { AuthService } from './auth.service';
 
 
@@ -17,5 +17,10 @@ export class AuthController {
     @Post('login')
     public async login(@Body() user: UserLogin) {
         return await this.authService.login(user)
+    }
+
+    @Post('2fa/verify')
+    public async verifyTwoFactorCode(@Body() dto: TwoFactorAuthDto) {
+      return await this.authService.validateTwoFactorCode(dto);
     }
 }

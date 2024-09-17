@@ -8,3 +8,11 @@ export class UserLogin {
     @IsString()
     password: string;
 }
+
+export class TwoFactorAuthDto {
+    @IsString()
+    email: string;
+    @IsString()
+    twoFactorCode: string;
+  }
+  

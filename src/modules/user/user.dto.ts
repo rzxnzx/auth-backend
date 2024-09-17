@@ -14,7 +14,4 @@ export class CreateUserDto {
 
     @IsString()
     confirmPassword: string
-    
-    @IsBoolean()
-    acceptTerms: boolean
 }
