@@ -42,7 +42,6 @@ export class UserService {
         return await this.prisma.user.findUnique({ where: { id: id } });
     }
 
-    // Método para actualizar el código 2FA y su expiración
     public async updateTwoFactorCode(userId: number, code: string, expiry: Date): Promise<void> {
         await this.prisma.user.update({
             where: { id: userId },
@@ -53,7 +52,6 @@ export class UserService {
         });
     }
 
-    // Método para limpiar el código 2FA después de validarlo
     public async clearTwoFactorCode(userId: number): Promise<void> {
         await this.prisma.user.update({
             where: { id: userId },
