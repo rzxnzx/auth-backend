@@ -4,7 +4,6 @@ import { UserService } from 'src/modules/user/user.service';
 import { TwoFactorAuthDto, UserLogin } from './auth.dto';
 import { AuthService } from './auth.service';
 
-
 @Controller('auth')
 export class AuthController {
     constructor(private userService: UserService, private authService: AuthService) { }

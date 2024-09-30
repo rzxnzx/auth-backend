@@ -14,5 +14,4 @@ export class TwoFactorAuthDto {
     email: string;
     @IsString()
     twoFactorCode: string;
-  }
-  
+}
